@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct 30 09:05:41 2020
+
+@author: kse18nru
+"""
+import pandas as pd
+import sys
+import matplotlib.pyplot as plt
+
+#%%
+suite = 'u-bu807'
+flight = 301
+config = 'RA1M'
+exp = 'Control'
+dir_path = f'../../Statistics/{suite}/flight{flight}/'
+
+#%%
+fig, ((ax0,ax1),(ax2,ax3)) = plt.subplots(2,2, figsize = (20,20))
+for res in ['0p5km', '1p5km', '4p4km']:
+    #%%
+    dtf_wsp = pd.read_csv(f'{dir_path}{config}_{res}_windspeed_statistics_basic.csv')
+    dtf_w = pd.read_csv(f'{dir_path}{config}_{res}_upward_wind_velocity_statistics_basic.csv')
+    dtf_theta = pd.read_csv(f'{dir_path}{config}_{res}_air_potential_temperature_statistics_basic.csv')
+    dtf_q = pd.read_csv(f'{dir_path}{config}_{res}_specific_humidity_statistics_basic.csv')
+    
+    #%%
+    dtf_wsp.sort_values(by='mean_alt_in_m', inplace = True)
+    dtf_w.sort_values(by='mean_alt_in_m', inplace = True)
+    dtf_theta.sort_values(by='mean_alt_in_m', inplace = True)
+    dtf_q.sort_values(by='mean_alt_in_m', inplace = True)
+    #%% 
+    print(dtf_wsp)
+    ax0.plot(dtf_wsp['mean_alt_in_m'], dtf_wsp['rmsd'], label = f'{res} RMSD')
+    
+    
+    ax1.plot(dtf_w['mean_alt_in_m'], dtf_w['rmsd'], label = f'{res} RMSD')
+    
+    
+    ax2.plot(dtf_theta['mean_alt_in_m'], dtf_theta['rmsd'], label = f'{res} RMSD')
+    
+    
+    ax3.plot(dtf_q['mean_alt_in_m'], dtf_q['rmsd'], label = f'{res} RMSD')
+    
+    
+    
+    
+    #sys.exit()
+    
+    
+    
+ax0.legend(); ax1.legend(); ax2.legend(); ax3.legend()
+ax0.grid(True); ax1.grid(True); ax2.grid(True); ax3.grid(True)
+ax0.set_title('horizontal windspeed')
+ax1.set_title('upward air velocity')
+ax2.set_title('potential temperature')
+ax3.set_title('specific humidity')
+ax0.set_ylabel(r'ms$^{-1}$')
+ax1.set_ylabel(r'ms$^{-1}$')
+ax2.set_ylabel('K')
+ax3.set_ylabel(r'gkg$^{-1}$')
+ax0.set_xlabel('Altitude, m')
+ax1.set_xlabel('Altitude, m')
+ax2.set_xlabel('Altitude, m')
+ax3.set_xlabel('Altitude, m')
+fig.suptitle('Atmospheric state variables, rmsd with altitude')
+fig.tight_layout()
+
+plt.show()
+
+save_fig = True
+if save_fig:
+    
+    fig.savefig(f'../../Figures/PNG/301/{suite}/Scatter/{exp}/atmostate/{config}_atmostate_bl_rmsd_performance_plots_{exp}_.png')
