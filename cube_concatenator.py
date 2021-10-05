@@ -9,13 +9,13 @@ For purposes of concatenating forecast data files into single 24hour forecast fi
 import iris
 import sys
 ## defining resolution domain, directory, and filenames
-variable = 'atmosphere_downward_northward_stress'
+variable = 'y_wind'
 name = variable
-suite = 'u-cc134'
-nc_path = f'D:/Project/Model_Data/{suite}/'
+suite = 'u-bu807'
+nc_path = f'D:/Project/Model_Data/{suite}/nc/Control/'
 
-flight = 306
-stream = 'ph'
+flight = 301
+stream = 'g'
 check_file = True
 if check_file:
     filename = f'RA1M_4p4km_um'
@@ -73,7 +73,7 @@ if plevel:
         iris.save(cubes, f'{nc_path}RA1M_{res}_cc134_24hrs_pressurevars_{flight}.nc')
            
 
-glm_select = True
+glm_select = False
 if glm_select:
     cube1 = iris.load_cube()
         

@@ -21,7 +21,7 @@ resolutions = ['0p5km','1p5km','4p4km']
 suite = 'u-cc134'
 #expt = 'Control'
 config = 'RA1M'
-
+flight = 306
 spatial_60s_atmostate = False
 if spatial_60s_atmostate:
     # work for 60s averaged database obs
@@ -44,7 +44,7 @@ if spatial_60s_atmostate:
         #%%
         #%% load and process database shortrun obs data
         # using pandas
-        database = pd.read_csv('D:/Project/Obvs_Data/Databases/IGP_flights_database_obs_60s_306.txt', delimiter = ' ')
+        database = pd.read_csv(f'D:/Project/Obvs_Data/Databases/IGP_flights_database_obs_60s_{flight}.txt', delimiter = ' ')
         
         db_legno = database['legno']
         slice_nos = [1,4,7,13,15]
@@ -450,9 +450,9 @@ if spatial_60s_fluxes:
                         if save_fig:
                             timepoint = dates[tidx].strftime('H%HM%M')
                             exp = 'control'
-                            fig.savefig(f'D:/Project/Figures/PDF/306/{suite}/spatial_series/60s/{leg}/{config}_{exp}_{res}_fluxes_wsshlh_series_60s_matchonly_{timepoint}_leg{leg}_306.pdf')
+                            fig.savefig(f'D:/Project/Figures/PDF/{flight}/{suite}/spatial_series/60s/{leg}/{config}_{exp}_{res}_fluxes_wsshlh_series_60s_matchonly_{timepoint}_leg{leg}_{flight}.pdf')
                             ax0.set_title(f'{res} Turbulent flux vars, leg {leg} xsection, {dates[tidx]}, {(np.nanmean(db_alt)//1)}m altitude')
-                            fig.savefig(f'D:/Project/Figures/PNG/306/{suite}/spatial_series/60s/{leg}/{config}_{exp}_{res}_fluxes_wsshlh_series_60s_matchonly_{timepoint}_leg{leg}_306.png')
+                            fig.savefig(f'D:/Project/Figures/PNG/{flight}/{suite}/spatial_series/60s/{leg}/{config}_{exp}_{res}_fluxes_wsshlh_series_60s_matchonly_{timepoint}_leg{leg}_{flight}.png')
                             
                         plt.show()
                         #%%

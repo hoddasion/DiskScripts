@@ -41,13 +41,29 @@ condition = (np.array(df_obs['legno'])  <5) * (np.array(df_obs['legno']) >3)
 plt.scatter(np.array(db_coors['lon'])[condition], np.array(db_coors['lat'])[condition],c=  np.array(df_obs['legno'])[condition])
 
 #%% 
-selection = []
-domain = ''
+selection = 3
+domain = 'NML'
 obspath = 'D:/Project/Obvs_Data/Databases/IGP_flights_database_obs_60s_306.txt'
-umpath = f'D:/Project/Model_Data/{suite}/Matched_interpolated_values.txt'
+umpath = f'D:/Project/Model_Data/{suite}/Matched_interpolated_values_60s.txt'
 fig_name = f'{config}_{res}_boxplots_{domain}_60s_obs_flt{flight}.png'
-stat_val_functions.make_boxplots(selection,res,obspath, umpath, suite, flight, fig_name, domain, config = 'RA1M', obstype = '60s', save_boxplots = True,
-                  ws_top = 4.2, hf_top = 160, hf_bttm = -160, save_boxplots = False)
+stat_val_functions.make_boxplots(selection,res,obspath, umpath, suite, flight, fig_name, domain, config = 'RA1M', obstype = '60s',
+                  ws_top = 4.2, hf_top = 250, hf_bttm = -250, save_boxplots = True)
+
+selection = 13
+domain = 'leg13'
+obspath = 'D:/Project/Obvs_Data/Databases/IGP_flights_database_obs_60s_306.txt'
+umpath = f'D:/Project/Model_Data/{suite}/Matched_interpolated_values_60s.txt'
+fig_name = f'{config}_{res}_boxplots_{domain}_60s_obs_flt{flight}.png'
+stat_val_functions.make_boxplots(selection,res,obspath, umpath, suite, flight, fig_name, domain, config = 'RA1M', obstype = '60s',
+                  ws_top = 0.8, hf_top = 50, hf_bttm = -50, save_boxplots = True)
+
+selection = 15
+domain = 'leg15'
+obspath = 'D:/Project/Obvs_Data/Databases/IGP_flights_database_obs_60s_306.txt'
+umpath = f'D:/Project/Model_Data/{suite}/Matched_interpolated_values_60s.txt'
+fig_name = f'{config}_{res}_boxplots_{domain}_60s_obs_flt{flight}.png'
+stat_val_functions.make_boxplots(selection,res,obspath, umpath, suite, flight, fig_name, domain, config = 'RA1M', obstype = '60s',
+                  ws_top = 0.8, hf_top = 40, hf_bttm = -40, save_boxplots = True)
 
 
 

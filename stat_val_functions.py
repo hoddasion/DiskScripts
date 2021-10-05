@@ -38,15 +38,30 @@ def make_boxplots(selection,res,obspath, umpath, suite, flight, fig_name, domain
     db_atmost = df_obs[['wsp','wd','w','theta','q_BUCK']]
     db_fluxes = df_obs[['sh','lh','tke','windstress']]
     db_legno = np.array(df_obs['legno'])
-    data_size = len(np.array(db_atmost['wsp']))
-    df_model = pd.read_csv(f'{umpath}')
-   
-    condition = db_legno == -1
-    for select in selection:
-        temp_cond = db_legno == select
-        condition = condition + temp_cond
-    print(df_model)
     
+    df_model = pd.read_csv(f'{umpath}')
+    
+    if selection == 0:
+        # selection #0 includes all data points
+        condition = db_legno >= 1
+    elif selection == 1:
+        # selection #1 is for both above mountain legs
+        condition = db_legno <=2
+    elif selection == 2:
+        # selection #2 is for all leeside legs
+        condition = db_legno > 2
+    elif selection == 3:
+        # for all close range parallel legs: 4,6,11
+        condition = (db_legno == 4) + (db_legno == 6) + (db_legno == 11)
+    elif selection == 13:
+        # for leg 13
+        condition = db_legno == 13
+    elif selection == 15:
+        # for leg 15
+        condition = db_legno == 15
+    
+    
+    data_size = len(np.array(db_atmost['wsp'])[condition])
     #%% plotting
     fig, ((ax0,ax1,ax2,ax3),(ax4,ax5,ax6,ax7)) = plt.subplots(2,4, figsize = (18,15))
     common_kwargs = {'widths':0.5, 'showmeans' : True,'medianprops':{'color':'red'}}
