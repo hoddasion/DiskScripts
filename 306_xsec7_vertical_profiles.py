@@ -300,7 +300,7 @@ for res in resolutions:
             fig.suptitle(f'{res} wsp profiles leg 7 long transect - {dates[tidx]}', fontsize = 17)
             fig.tight_layout()
             
-            savefig = True
+            savefig = False
             if savefig:
                 print(f'Saving {dates[tidx]}')
                 hours = int(hrs_s_midn[tidx] //1)

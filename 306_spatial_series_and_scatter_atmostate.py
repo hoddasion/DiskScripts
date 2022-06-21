@@ -17,10 +17,11 @@ import matplotlib.pyplot as plt
 import xsection_workshop as workshop
 #%%
 
-resolutions = ['0p5km','1p5km','4p4km']
-suite = 'u-cc134'
+resolutions = ['0p5km']#,'1p5km','4p4km']
+suite = 'u-cf117'
 #expt = 'Control'
-config = 'RA1M'
+config = 'LONGTAIL'
+experiment = 'LONGTAIL'
 flight = 306
 spatial_60s_atmostate = False
 if spatial_60s_atmostate:
@@ -255,9 +256,9 @@ if spatial_60s_atmostate:
                             save_fig = True
                             if save_fig:
                                 timepoint = dates[tidx].strftime('H%HM%M')
-                                exp = 'control'
-                                fig.savefig(f'D:/Project/Figures/PNG/306/{suite}/spatial_series/60s/{leg}/{config}_{exp}_{res}_atmostate_series_60s_matchonly_{timepoint}_leg{leg}_306.png')
-                                fig.savefig(f'D:/Project/Figures/PDF/306/{suite}/spatial_series/60s/{leg}/{config}_{exp}_{res}_atmostate_series_60s_matchonly_{timepoint}_leg{leg}_306.pdf')
+                                exp = 'BL'
+                                fig.savefig(f'D:/Project/Figures/PNG/306/{config}/{suite}/spatial_series/60s/{leg}/{config}_{exp}_{res}_atmostate_series_60s_matchonly_{timepoint}_leg{leg}_306.png')
+                                #fig.savefig(f'D:/Project/Figures/PDF/306/{suite}/spatial_series/60s/{leg}/{config}_{exp}_{res}_atmostate_series_60s_matchonly_{timepoint}_leg{leg}_306.pdf')
                             plt.show()
                             #%%
                         except:
@@ -275,27 +276,27 @@ if spatial_60s_fluxes:
         alt_idx = 35
         ## windstress (two cumponents, need to be combined)
         # wse = windstrss eastward, wsn = windstress northward
-        wse_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/RA1M_{res}_um_atmosphere_downward_eastward_stress_24hrs_ph_306.nc', 'atmosphere_downward_eastward_stress')[8:-2,:alt_idx]
-        wsn_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/RA1M_{res}_um_atmosphere_downward_northward_stress_24hrs_ph_306.nc','atmosphere_downward_northward_stress')[8:-2,:alt_idx]
+        wse_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_atmosphere_downward_eastward_stress_24hrs_ph_306.nc', 'atmosphere_downward_eastward_stress')[8:-2,:alt_idx]
+        wsn_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_atmosphere_downward_northward_stress_24hrs_ph_306.nc','atmosphere_downward_northward_stress')[8:-2,:alt_idx]
         # regrid wsn cube and combine cubes for magnitude
         #%%
         wsn_cube_reg = wsn_cube.regrid(wse_cube, iris.analysis.Linear())
-        ws_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/RA1M_{res}_um_atmosphere_downward_eastward_stress_24hrs_ph_306.nc', 'atmosphere_downward_eastward_stress')[8:-2,:alt_idx]
+        ws_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_atmosphere_downward_eastward_stress_24hrs_ph_306.nc', 'atmosphere_downward_eastward_stress')[8:-2,:alt_idx]
         ws_cube.data = (wse_cube.data**2 + wsn_cube_reg.data**2)**0.5
         #%%
         ## load heatfluxes
         # lh = latent heat, sh = sensible heat
         #lh_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/RA1M_{res}_um_surface_upward_latent_heat_flux_24hrs_pg_306.nc', 'atmosphere_upward_latent_heat_flux')[:,:alt_idx]
-        sh_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/RA1M_{res}_um_upward_heat_flux_in_air_24hrs_pi_306.nc', 'upward_heat_flux_in_air')[8:-2,:alt_idx]
+        sh_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_upward_heat_flux_in_air_24hrs_pi_306.nc', 'upward_heat_flux_in_air')[8:-2,:alt_idx]
         # calculate lh
         #%%
-        theta_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_air_potential_temperature_24hrs_pi_306.nc', 'air_potential_temperature')[8:-2,:alt_idx]
-        p_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_air_pressure_24hrs_pi_306.nc', 'air_pressure')[8:-2,:alt_idx]
-        q_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_specific_humidity_24hrs_pi_306.nc', 'specific_humidity')[8:-2,:alt_idx]
-        vf_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_upward_water_vapor_flux_in_air_24hrs_pi_306.nc', 'upward_water_vapor_flux_in_air')[8:-2,:alt_idx] # vapor flux
-        lh_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/RA1M_{res}_um_upward_heat_flux_in_air_24hrs_pi_306.nc', 'upward_heat_flux_in_air')[8:-2,:alt_idx]
-        lh_data = dmna.calc_lhf(q_cube.data,theta_cube.data,p_cube.data,vf_cube.data)
-        lh_cube.data = lh_data
+        #theta_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_air_potential_temperature_24hrs_pi_306.nc', 'air_potential_temperature')[8:-2,:alt_idx]
+        #p_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_air_pressure_24hrs_pi_306.nc', 'air_pressure')[8:-2,:alt_idx]
+        #q_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_specific_humidity_24hrs_pi_306.nc', 'specific_humidity')[8:-2,:alt_idx]
+        #vf_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_upward_water_vapor_flux_in_air_24hrs_pi_306.nc', 'upward_water_vapor_flux_in_air')[8:-2,:alt_idx] # vapor flux
+        lh_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_upward_latent_heat_flux_in_air_24hrs_pi_306.nc', 'upward_latent_heat_flux_in_air')[8:-2,:alt_idx]
+        #lh_data = dmna.calc_lhf(q_cube.data,theta_cube.data,p_cube.data,vf_cube.data)
+        #lh_cube.data = lh_data
         #%% load and process database shortrun obs data
         # using pandas
         database = pd.read_csv('D:/Project/Obvs_Data/Databases/IGP_flights_database_obs_60s_306.txt', delimiter = ' ')
@@ -450,9 +451,9 @@ if spatial_60s_fluxes:
                         if save_fig:
                             timepoint = dates[tidx].strftime('H%HM%M')
                             exp = 'control'
-                            fig.savefig(f'D:/Project/Figures/PDF/{flight}/{suite}/spatial_series/60s/{leg}/{config}_{exp}_{res}_fluxes_wsshlh_series_60s_matchonly_{timepoint}_leg{leg}_{flight}.pdf')
+                            #fig.savefig(f'D:/Project/Figures/PDF/{flight}/{suite}/spatial_series/60s/{leg}/{config}_{exp}_{res}_fluxes_wsshlh_series_60s_matchonly_{timepoint}_leg{leg}_{flight}.pdf')
                             ax0.set_title(f'{res} Turbulent flux vars, leg {leg} xsection, {dates[tidx]}, {(np.nanmean(db_alt)//1)}m altitude')
-                            fig.savefig(f'D:/Project/Figures/PNG/{flight}/{suite}/spatial_series/60s/{leg}/{config}_{exp}_{res}_fluxes_wsshlh_series_60s_matchonly_{timepoint}_leg{leg}_{flight}.png')
+                            fig.savefig(f'D:/Project/Figures/PNG/{flight}/{experiment}/{suite}/spatial_series/60s/{leg}/{config}_{exp}_{res}_fluxes_wsshlh_series_60s_matchonly_{timepoint}_leg{leg}_{flight}.png')
                             
                         plt.show()
                         #%%

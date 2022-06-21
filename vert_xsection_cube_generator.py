@@ -20,7 +20,7 @@ from iris.analysis import trajectory
 
 #%%
 
-Case = {'res' : '0p5km', 'flight' : 306, 'varname' : 'y_wind', 'experiment' : 'Control', 
+Case = {'res' : '0p5km', 'flight' : 306, 'varname' : 'upward_air_velocity', 'experiment' : 'CONTROL', 
         'config' : 'RA1M', 'suite' : 'u-cc134', 'filestream' : 'ph'}
 res = Case['res']; suite = Case['suite']; exp = Case['experiment']; varname = Case['varname']; config = Case['config']; stream = Case['filestream']; flight = Case['flight']
 print(Case.values())
@@ -28,12 +28,12 @@ print(Case.values())
 #%%
 leg_xsections = True
 if leg_xsections:
-    legs = [6]#[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-    res = ['0p5km','1p5km','4p4km']
+    legs = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+    res = ['0p5km']#,'1p5km','4p4km']
     for res in res:
         #%%
                 
-        cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/RA1M_{res}_um_{varname}_24hrs_{stream}_{flight}.nc', varname)
+        cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_{res}_um_{varname}_24hrs_{stream}_{flight}.nc', varname)
         #print(cube)
         for i in legs:
                 print('Cycle', f'leg {i+1}', res)
@@ -64,7 +64,7 @@ if leg_xsections:
                 ystart = rot_db_lat[0]
                 xend = rot_db_lon[-1]
                 yend = rot_db_lat[-1]
-                if i == 0:
+                if i == 0 or i == 1:
                     xstart -= 0.05
                     xend -= 0.05
                 grad = (yend - ystart)/(xend - xstart)
@@ -75,11 +75,13 @@ if leg_xsections:
                 delta_factor = 1.5
                 dx = delta_factor*(xend - xstart)
                 dy = delta_factor*(yend - ystart)
-                dxs =4.5*(xend - xstart)
-                dys = 4.5*(yend - ystart)
+                factor = 2
+                dxs =factor*(xend - xstart)
+                dys =factor*(yend - ystart)
                 num =int(( np.absolute(((xend+dx)**2 + (yend+dy)**2)**0.5 - ((xstart-dxs)**2 + (ystart-dys)**2)**0.5 )/gap)//1)
                 print(num)
                 print(xstart, xend, ystart, yend)
+                
                 #%%
                 
                 xrow = np.linspace(xstart-dxs,xend+dx, num = num)
@@ -88,7 +90,7 @@ if leg_xsections:
                 sample_points = [('grid_latitude', yrow),('grid_longitude', xrow)]
                 
                 #%% interpolate cubes
-                NS_offsets = True; NSofst = 0.20; NSofst_str = '0p20'
+                NS_offsets = False; NSofst = 0.20; NSofst_str = '0p20'
                 try:
                     cubeslice = trajectory.interpolate(cube,sample_points, method =  'nearest')
                     if NS_offsets:
@@ -105,13 +107,13 @@ if leg_xsections:
                 save = True
                 if save:
                     if num > 10:
-                        iris.save(cubeslice, f'D:/Project/Model_data/{suite}/Vertical/{varname}/{config}_vertslice_{res}_{varname}_flt{flight}_leg{legno}long.nc')
+                        iris.save(cubeslice, f'D:/Project/Model_data/{suite}/Vertical/{varname}/{config}_vertslice_{res}_{varname}_flt{flight}_leg{legno}_f{factor}.nc') # add 'long' to filename for long xsections
                         if NS_offsets:
-                            iris.save(cubeslice_N, f'D:/Project/Model_data/{suite}/Vertical/{varname}/{config}_vertslice_{res}_{varname}_flt{flight}_leg{legno}long_ofts_N{NSofst_str}.nc')
-                            iris.save(cubeslice_S, f'D:/Project/Model_data/{suite}/Vertical/{varname}/{config}_vertslice_{res}_{varname}_flt{flight}_leg{legno}long_ofts_S{NSofst_str}.nc')
+                            iris.save(cubeslice_N, f'D:/Project/Model_data/{suite}/Vertical/{varname}/{config}_vertslice_{res}_{varname}_flt{flight}_leg{legno}long_ofts_N{NSofst_str}_f{factor}.nc')
+                            iris.save(cubeslice_S, f'D:/Project/Model_data/{suite}/Vertical/{varname}/{config}_vertslice_{res}_{varname}_flt{flight}_leg{legno}long_ofts_S{NSofst_str}_f{factor}.nc')
                 
                 #%%
-                ocube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_0p5km_um_land_binary_mask_24hrs_pi_{flight}.nc', 'land_binary_mask')
+                ocube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_0p5km_umpa1_flt{flight}.nc', 'land_binary_mask')
                 #print(ocube)
                 odata = ocube.data; olat = ocube.coord('grid_latitude').points; olon = ocube.coord('grid_longitude').points
                 slice_lon = cubeslice.coord('grid_longitude').points; slice_lat = cubeslice.coord('grid_latitude').points
@@ -119,8 +121,8 @@ if leg_xsections:
                 fig = plt.figure(figsize = (16,16))
                 plt.contour(olon,olat,odata)
                 plt.plot(slice_lon,slice_lat)
-                plt.plot(slice_lon,slice_lat+NSofst)
-                plt.plot(slice_lon,slice_lat-NSofst)
+                #plt.plot(slice_lon,slice_lat+NSofst)
+                #plt.plot(slice_lon,slice_lat-NSofst)
                 #plt.close()
                 plt.show()
 

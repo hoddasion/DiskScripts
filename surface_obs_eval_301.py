@@ -156,13 +156,13 @@ if Tmean_analysis:
     ax0.legend(fontsize = 12)
 
 #%% plot temperature
-plot_temp = True
+plot_temp = False
 if plot_temp:
     lowT = 267.5; highT = 276.5; Tticks = [268,270,272,274,276]
     fig, (ax0,ax1,ax2,ax3) = plt.subplots(4,1, figsize = (10,10))
     CtK = 273.15 # Celsius to Kelvin conversion
     ax0.plot(time_x[1::2], np.array(GUFUS_obs.TEMP) + CtK, label = 'obs')
-    ax0.plot(time_x, temp_subcube.data[:,0], label = 'UM 0p5km')
+    ax0.plot(time_x, temp_subcube.data[:,0] -0.006, label = 'UM 0p5km')
     ax0.set_xlim(left = 0, right = 24)
     ax0.set_xticks(np.arange(0,25))
     ax0.set_xticklabels([])
@@ -173,7 +173,7 @@ if plot_temp:
     ax0.set_ylabel('K')
     
     ax1.plot(time_x[1::2], np.array(BLAFE_obs.TEMP) + CtK)
-    ax1.plot(time_x, temp_subcube.data[:,1])
+    ax1.plot(time_x, temp_subcube.data[:,1] - 0.063)
     ax1.set_xlim(left = 0, right = 24)
     ax1.set_xticks(np.arange(0,25))
     ax1.set_xticklabels([])
@@ -183,7 +183,7 @@ if plot_temp:
     ax1.set_ylabel('K')
     
     ax2.plot(time_x[1::2], np.array(STH_obs.TEMP) + CtK)
-    ax2.plot(time_x, temp_subcube.data[:,2])
+    ax2.plot(time_x, temp_subcube.data[:,2] - 0.074)
     ax2.set_xlim(left = 0, right = 24)
     ax2.set_xticks(np.arange(0,25))
     ax2.set_xticklabels([])
@@ -193,7 +193,7 @@ if plot_temp:
     ax2.set_ylabel('K')
     
     ax3.plot(time_x[1::2], np.array(BULAH_obs.TEMP) + CtK)
-    ax3.plot(time_x, temp_subcube.data[:,3])
+    ax3.plot(time_x, temp_subcube.data[:,3] - 0.157)
     ax3.set_xlim(left = 0, right = 24)
     ax3.set_xticks(np.arange(0,25))
     ax3.set_xticklabels(['00:00','','','','','','06:00','','','','','','12:00','','','','','','18:00','','','','','','00:00'])
@@ -207,7 +207,7 @@ if plot_temp:
     plt.savefig('D:/Project/Figures/PNG/301/u-bu807/groundstations/RA1M_2m_temperature_snaes4stations_301.png')
 
 #%%
-plot_wsp = False
+plot_wsp = True
 if plot_wsp:
     lowT = -0.5; highT = 15.5; Tticks = [0,5,10,15]
     fig, (ax0,ax1,ax2,ax3) = plt.subplots(4,1, figsize = (10,10))
@@ -309,7 +309,7 @@ if plot_rh:
     plt.savefig('D:/Project/Figures/PNG/301/u-bu807/groundstations/RA1M_2m_relative_humidity_snaes4stations_301.png')
     
 #%%
-plot_p = True
+plot_p = False
 if plot_p:
     
     print(np.array(GUFUS_obs.PRES).astype(np.float))
@@ -320,7 +320,7 @@ if plot_p:
     fig, (ax0,ax3) = plt.subplots(2,1, figsize = (10,5))
     CtK = 273.15 # Celsius to Kelvin conversion
     ax0.plot(time_x[1::2], np.array(GUFUS_obs.PRES).astype(np.float), label = 'obs')
-    ax0.plot(time_x, p_subcube.data[:,0]/100, label = 'UM 0p5km')
+    ax0.plot(time_x, p_subcube.data[:,0]/100 -0.126, label = 'UM 0p5km')
     ax0.set_xlim(left = 0, right = 24)
     ax0.set_xticks(np.arange(0,25))
     ax0.set_xticklabels([])
@@ -333,7 +333,7 @@ if plot_p:
     
     
     ax3.plot(time_x[1::2], np.array(STH_obs.PRES).astype(np.float))
-    ax3.plot(time_x, p_subcube.data[:,2]/100)
+    ax3.plot(time_x, p_subcube.data[:,2]/100 - 1.56)
     ax3.set_xlim(left = 0, right = 24)
     ax3.set_xticks(np.arange(0,25))
     ax3.set_xticklabels(['00:00','','','','','','06:00','','','','','','12:00','','','','','','18:00','','','','','','00:00'])
@@ -342,6 +342,6 @@ if plot_p:
     ax3.set_title('STH (2050)')
     ax3.set_ylabel('hPa')
     
-    fig.suptitle('2m Pressure - 12th March 2018 (case 301)')
+    fig.suptitle('2m Pressure (corr) - 12th March 2018 (case 301)')
     plt.tight_layout()
-    plt.savefig('D:/Project/Figures/PNG/301/u-bu807/groundstations/RA1M_2m_pressure_snaes2stations_301.png')
+    plt.savefig('D:/Project/Figures/PNG/301/u-bu807/groundstations/RA1M_2m_pressure_corrected_snaes2stations_301.png')

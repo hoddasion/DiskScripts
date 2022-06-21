@@ -18,20 +18,20 @@ import model_foundry as foundry
 
 
 #%% global definitions
-Case = '4p4km'
-variable = 'surface_altitude_0'
+res = '0p5km'
+variable = 'surface_altitude'
 Domain = 'fulldomain'
 flight = 306
-suite = 'u-cc134'
-experiment = 'Control'
-
+suite = 'u-cf117'
+experiment = 'LONGTAIL'
+config = ''
 plt.close()
-try:
-    ocube = iris.load_cube(f'D:/Project/Model_Data/{suite}/RA1M_{Case}_um_surface_altitude_0_24hrs_pi_{flight}.nc', variable)
-    lmcube = iris.load_cube(f'D:/Project/Model_Data/{suite}/RA1M_{Case}_um_land_binary_mask_24hrs_pi_{flight}.nc', 'land_binary_mask')
-except:
-    ocube = iris.load_cube(f'../../Model_Data/{suite}/nc/{experiment}/{variable}/{Case}_{variable}_301.nc', variable)
-    lmcube = iris.load_cube(f'../../Model_Data/{suite}/nc/{experiment}/land_binary_mask/{Case}_land_binary_mask_301.nc')
+#try:
+ocube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{experiment}_{res}_umpa1_flt{flight}.nc', variable)
+lmcube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{experiment}_{res}_umpa1_flt{flight}.nc', 'land_binary_mask')
+#except:
+#    ocube = iris.load_cube(f'../../Model_Data/{suite}/nc/{experiment}/{variable}/{res}_{variable}_301.nc', variable)
+#    lmcube = iris.load_cube(f'../../Model_Data/{suite}/nc/{experiment}/land_binary_mask/{res}_land_binary_mask_301.nc')
 lmdata = lmcube.data
 lmlon = lmcube.coord('grid_longitude').points
 lmlat = lmcube.coord('grid_latitude').points
@@ -50,14 +50,14 @@ if Domain == 'fulldomain':
     ## filter out sea points
     odata[np.where(lmdata != 1)] = np.nan
     ## define contour levels for each resolution
-    if Case == '0p5km':
+    if res == '0p5km':
         levels = [0, 30,60,90,120,150,180,210,240,270,300,350,400,450,500,600,700,800,900,1000]
         levels = [0,500,1000,1500]
         figsize = (10,14)
-    elif Case == '1p5km':
+    elif res == '1p5km':
         levels = [0,50,100,200,300,500,600, 700,800,900,1000,1100,1200,1400,1600,1800]
         figsize = (17,16)
-    elif Case == '4p4km':
+    elif res == '4p4km':
         levels = [0,50,100,200,300,500,600,800,1000,1200,1400,1600,1800,2000,2500,3000,3500,4000]
         figsize = (17,16)
     
@@ -82,22 +82,22 @@ if Domain == 'fulldomain':
     ql = ax.set_yticklabels([]); q9 = ax.set_xticklabels([])
     
     # set title
-    qt = ax.set(Title = f'Model orography for {Case} with e = 1 smoothing')
+    qt = ax.set(Title = f'Model orography for {res} with e = 1 smoothing')
     
     # save figure
-    plt.savefig(f'D:/Project/Figures/PDF/{flight}/{suite}/{Case}_surface_altitude_{Domain}_pcolor_{experiment}_cc134_flt{flight}.pdf')
-    plt.savefig(f'D:/Project/Figures/PNG/{flight}/{suite}/{Case}_surface_altitude_{Domain}_pcolor_{experiment}_cc134_flt{flight}.png')
+    #plt.savefig(f'D:/Project/Figures/PDF/{flight}/{suite}/{Case}_surface_altitude_{Domain}_pcolor_{experiment}_cc134_flt{flight}.pdf')
+    plt.savefig(f'D:/Project/Figures/PNG/{flight}/{experiment}/{suite}/{res}_surface_altitude_{Domain}_pcolor_{experiment}_cf117_flt{flight}.png')
     plt.show()
     
     
 #%% Subset to fit peninsulas domain
 if Domain == 'peninsulas':
     ## boundaries (in points):
-    if Case == '4p4km':
+    if res == '4p4km':
         South = 115; North = 200; West = 150; East = 185
-    if Case == '1p5km':
+    if res == '1p5km':
         South = 110; North = 350; West = 90; East = 185
-    if Case == '0p5km':
+    if res == '0p5km':
         South = 80; North = -1; West = 50; East = 350
     # subset 4d data
     orog = foundry.modf.subset_2d(odata, South, North, West, East)
@@ -128,23 +128,23 @@ if Domain == 'peninsulas':
     cbar = fig.colorbar(q0, ax = ax)
     #q1 = ax.contour(sub_lmlon, sub_lmlat, lm, colors = 'k', levels = 1)
     # set title
-    qt = ax.set(Title = f'Model orography for {Case} with e = 1 smoothing')
+    qt = ax.set(Title = f'Model orography for {res} with e = 1 smoothing')
     # hide axis labels
     ql = ax.set_yticklabels([]); q9 = ax.set_xticklabels([])
     # save figure
-    plt.savefig(f'../../Figures/PDF/301/{Case}_surface_altitude_{Domain}_contf_{experiment}_bu807_flt301.pdf')
-    plt.savefig(f'../../Figures/PNG/301/{Case}_surface_altitude_{Domain}_contf_{experiment}_bu807_flt301.png')
+    plt.savefig(f'../../Figures/PDF/301/{res}_surface_altitude_{Domain}_contf_{experiment}_bu807_flt301.pdf')
+    plt.savefig(f'../../Figures/PNG/301/{res}_surface_altitude_{Domain}_contf_{experiment}_bu807_flt301.png')
     
     plt.show()
 
 #%% Subset to fit snaesfellness domain
 if Domain == 'snaesfellness':
     ## boundaries (in points):
-    if Case == '4p4km':
+    if res == '4p4km':
         South = 143; North = 155; West = 150; East = 178
-    if Case == '1p5km':
+    if res == '1p5km':
         South = 190; North = 220; West = 90; East = 160
-    if Case == '0p5km':
+    if res == '0p5km':
         South = 280; North = 370; West = 50; East = 250
     # subset 4d data
     orog = foundry.modf.subset_2d(odata, South, North, West, East)
@@ -197,7 +197,7 @@ if Domain == 'snaesfellness':
     axes[1].legend()
     #q1 = ax.contour(sub_lmlon, sub_lmlat, lm, colors = 'k', levels = 1)
     # set title
-    qt = axes[0].set(Title = f'Model orography for {Case} with e = 1 smoothing')
+    qt = axes[0].set(Title = f'Model orography for {res} with e = 1 smoothing')
     # hide axis labels
     axes[1].set(ylabel = 'Surface altitude [m]')
     axes[0].set_yticklabels([]); axes[0].set_xticklabels([]); 

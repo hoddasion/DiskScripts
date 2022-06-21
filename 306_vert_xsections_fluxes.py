@@ -19,7 +19,7 @@ import iris.plot as iplt
 import matplotlib.gridspec as gridspec
 #%%
 plt.rcParams['font.size'] = 26
-resolutions = ['0p5km','1p5km', '4p4km']
+resolutions = ['0p5km']#,'1p5km', '4p4km']
 var_we = 'atmosphere_downward_eastward_stress'
 var_wn = 'atmosphere_downward_northward_stress'
 var_sh = 'upward_heat_flux_in_air'
@@ -31,9 +31,9 @@ var_vap = 'upward_water_vapor_flux_in_air'
 lat_lon_ord = ('grid_latitude', 'grid_longitude')
 lon_lat_ord = ('grid_longitude', 'grid_latitude')
 
-config = 'RA1M'
-exp = 'Control'
-suite = 'u-cc134'
+config = 'LONGTAIL'
+exp = 'LONGTAIL'
+suite = 'u-cf117'
 alt_idx = 35
 
 for res in resolutions:
@@ -49,27 +49,23 @@ for res in resolutions:
             
             ## windstress (two cumponents, need to be combined)
             # wse = windstrss eastward, wsn = windstress northward
-            wse_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/{var_we}/RA1M_vertslice_{res}_{var_we}_flt306_leg{cube_legs[i]}.nc', var_we)[:,:alt_idx]
-            wsn_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/{var_wn}/RA1M_vertslice_{res}_{var_wn}_flt306_leg{cube_legs[i]}.nc',var_wn)[:,:alt_idx]
+            wse_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/{var_we}/{config}_vertslice_{res}_{var_we}_flt306_leg{cube_legs[i]}.nc', var_we)[:,:alt_idx]
+            wsn_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/{var_wn}/{config}_vertslice_{res}_{var_wn}_flt306_leg{cube_legs[i]}.nc',var_wn)[:,:alt_idx]
             # regrid wsn cube and combine cubes for magnitude
             #%%
             
-            ws_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/{var_we}/RA1M_vertslice_{res}_{var_we}_flt306_leg{cube_legs[i]}.nc', var_we)[:,:alt_idx]
+            ws_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/{var_we}/{config}_vertslice_{res}_{var_we}_flt306_leg{cube_legs[i]}.nc', var_we)[:,:alt_idx]
             ws_cube.data = (wse_cube.data**2 + wsn_cube.data**2)**0.5
             #%%
             ## load heatfluxes
             # lh = latent heat, sh = sensible heat
             #lh_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/RA1M_{res}_um_surface_upward_latent_heat_flux_24hrs_pg_306.nc', 'atmosphere_upward_latent_heat_flux')[:,:alt_idx]
-            sh_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/{var_sh}/RA1M_vertslice_{res}_{var_sh}_flt306_leg{cube_legs[i]}.nc', 'upward_heat_flux_in_air')[:,:alt_idx]
+            sh_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/{var_sh}/{config}_vertslice_{res}_{var_sh}_flt306_leg{cube_legs[i]}.nc', 'upward_heat_flux_in_air')[:,:alt_idx]
             # calculate lh
             #%%
-            theta_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/{var_theta}/RA1M_vertslice_{res}_{var_theta}_flt306_leg{cube_legs[i]}.nc', 'air_potential_temperature')[:,:alt_idx]
-            p_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/{var_p}/RA1M_vertslice_{res}_{var_p}_flt306_leg{cube_legs[i]}.nc', 'air_pressure')[:,:alt_idx]
             
-            vf_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/{var_vap}/RA1M_vertslice_{res}_{var_vap}_flt306_leg{cube_legs[i]}.nc', 'upward_water_vapor_flux_in_air')[:,:alt_idx] # vapor flux
-            lh_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/{var_sh}/RA1M_vertslice_{res}_{var_sh}_flt306_leg{cube_legs[i]}.nc', 'upward_heat_flux_in_air')[:,:alt_idx]
-            lh_data = dmna.calc_lhf(q_cube.data,theta_cube.data,p_cube.data,vf_cube.data)
-            lh_cube.data = lh_data
+            lh_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/Vertical/upward_latent_heat_flux_in_air/{config}_vertslice_{res}_upward_latent_heat_flux_in_air_flt306_leg{cube_legs[i]}.nc', 'upward_latent_heat_flux_in_air')[:,:alt_idx]
+            
             
             net_cube = lh_cube + sh_cube
             #%% get scalar distance ticklist for x axis labelling
@@ -114,7 +110,7 @@ for res in resolutions:
                     db_alt = np.array(database['altgps'][legcond])
                             
                     #%% rotate db coords
-                    compcube = iris.load_cube(f'D:/Project/Model_Data/{suite}/RA1M_0p5km_um_upward_air_velocity_24hrs_ph_306.nc', 'upward_air_velocity')[0,0]
+                    compcube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{config}_0p5km_um_upward_air_velocity_24hrs_ph_306.nc', 'upward_air_velocity')[0,0]
                     polelat = compcube.coord('grid_latitude').coord_system.grid_north_pole_latitude
                     polelon = compcube.coord('grid_longitude').coord_system.grid_north_pole_longitude
                     rot_db_lon, rot_db_lat = rotate_pole(db_lon, db_lat, polelon, polelat)
@@ -127,12 +123,12 @@ for res in resolutions:
                     #%% set colorbar normalisations
                                    
                     wsmin = 0; wsmax = np.nanpercentile(ws_cube.data[tidx], 99.99)
-                    #lhmin = -np.nanpercentile(np.positive(lh_cube.data[tidx]), 99.99); lhmax = -lhmin
-                    #shmin = -np.nanpercentile(np.positive(sh_cube.data[tidx]), 99.99); shmax = -shmin
-                    #netmin = -np.nanpercentile(np.positive(sh_cube.data[tidx] + lh_cube.data[tidx]), 99.99); netmax = -netmin
-                    lhmin = -200; lhmax = -lhmin
-                    shmin = -200; shmax = -shmin
-                    netmin = -200; netmax = -netmin
+                    lhmin = -np.nanpercentile(np.positive(lh_cube.data[tidx]), 99.99); lhmax = -lhmin
+                    shmin = -np.nanpercentile(np.positive(sh_cube.data[tidx]), 99.99); shmax = -shmin
+                    netmin = -np.nanpercentile(np.positive(sh_cube.data[tidx] + lh_cube.data[tidx]), 99.99); netmax = -netmin
+                    #lhmin = -200; lhmax = -lhmin
+                    #shmin = -200; shmax = -shmin
+                    #netmin = -200; netmax = -netmin
                     
                     ws_norm = matplotlib.colors.Normalize(vmin = wsmin, vmax = wsmax)
                     sh_norm = matplotlib.colors.Normalize(vmin = shmin, vmax = shmax)
@@ -228,9 +224,9 @@ for res in resolutions:
                     if save_figure:
                         timepoint = dates[tidx].strftime('H%HM%M')
                         print(dates[tidx])
-                        plt.savefig(f'D:/Project/Figures/PDF/306/{suite}/Vertical/fluxes/obs/{legnames[i]}/{config}_{res}_turbflux_vert_xsection_obs_{exp}_{timepoint}_leg{legnames[i]}.pdf')
-                        fig.suptitle(f'{res} Turbulent flux variables, leg {legnames[i]}, {dates[tidx]}')
-                        plt.savefig(f'D:/Project/Figures/PNG/306/{suite}/Vertical/fluxes/obs/{legnames[i]}/{config}_{res}_turbflux_vert_xsection_obs_{exp}_{timepoint}_leg{legnames[i]}.png')
+                        #plt.savefig(f'D:/Project/Figures/PDF/306/{suite}/Vertical/fluxes/obs/{legnames[i]}/{config}_{res}_turbflux_vert_xsection_obs_{exp}_{timepoint}_leg{legnames[i]}.pdf')
+                        fig.suptitle(f'{config} {res} Turbulent flux variables, leg {legnames[i]}, {dates[tidx]}')
+                        plt.savefig(f'D:/Project/Figures/PNG/306/{exp}/{suite}/vertical/fluxes/obs/{legnames[i]}/{config}_{res}_turbflux_vert_xsection_obs_{exp}_{timepoint}_leg{legnames[i]}_dynamicscale.png')
                         
                     
                     plt.show()

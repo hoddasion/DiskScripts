@@ -21,16 +21,16 @@ import matplotlib.gridspec as gridspec
 from iris.analysis import trajectory
 import stat_val_functions
 #%% 
-res = '0p5km'
+res = '4p4km'
 flight = '306'
 suite = 'u-cc134'
 config = 'RA1M'
 alt_idx = 30
 tstart_idx = 24; tend_idx = 40
 raw_all_points_sr = False
-raw_all_points_60s = False
-seperate_leeside_points_60s = False
-seperate_mountain_points_60s = False
+raw_all_points_60s = True
+seperate_leeside_points_60s = True
+seperate_mountain_points_60s = True
 #%%
 obs_filename = f'IGP_flights_database_obs_60s_{flight}.txt'
 path = 'D:/Project/Obvs_Data/Databases/'
@@ -47,7 +47,7 @@ obspath = 'D:/Project/Obvs_Data/Databases/IGP_flights_database_obs_60s_306.txt'
 umpath = f'D:/Project/Model_Data/{suite}/Matched_interpolated_values_60s.txt'
 fig_name = f'{config}_{res}_boxplots_{domain}_60s_obs_flt{flight}.png'
 stat_val_functions.make_boxplots(selection,res,obspath, umpath, suite, flight, fig_name, domain, config = 'RA1M', obstype = '60s',
-                  ws_top = 4.2, hf_top = 250, hf_bttm = -250, save_boxplots = True)
+                  ws_top = 4.2, hf_top = 250, hf_bttm = -250, save_boxplots = False)
 
 selection = 13
 domain = 'leg13'
@@ -55,7 +55,7 @@ obspath = 'D:/Project/Obvs_Data/Databases/IGP_flights_database_obs_60s_306.txt'
 umpath = f'D:/Project/Model_Data/{suite}/Matched_interpolated_values_60s.txt'
 fig_name = f'{config}_{res}_boxplots_{domain}_60s_obs_flt{flight}.png'
 stat_val_functions.make_boxplots(selection,res,obspath, umpath, suite, flight, fig_name, domain, config = 'RA1M', obstype = '60s',
-                  ws_top = 0.8, hf_top = 50, hf_bttm = -50, save_boxplots = True)
+                  ws_top = 0.8, hf_top = 50, hf_bttm = -50, save_boxplots = False)
 
 selection = 15
 domain = 'leg15'
@@ -63,7 +63,7 @@ obspath = 'D:/Project/Obvs_Data/Databases/IGP_flights_database_obs_60s_306.txt'
 umpath = f'D:/Project/Model_Data/{suite}/Matched_interpolated_values_60s.txt'
 fig_name = f'{config}_{res}_boxplots_{domain}_60s_obs_flt{flight}.png'
 stat_val_functions.make_boxplots(selection,res,obspath, umpath, suite, flight, fig_name, domain, config = 'RA1M', obstype = '60s',
-                  ws_top = 0.8, hf_top = 40, hf_bttm = -40, save_boxplots = True)
+                  ws_top = 0.8, hf_top = 40, hf_bttm = -40, save_boxplots = False)
 
 
 
@@ -174,7 +174,7 @@ if raw_all_points_60s:
     db_fluxes = df_obs[['sh','lh','tke','windstress']]
     
     flight_suffix = ''
-    df_model = pd.read_csv(f'D:/Project/Model_Data/{suite}/Matched_interpolated_values_60s.txt')
+    df_model = pd.read_csv(f'D:/Project/Model_Data/{suite}/Matched_interpolated_{res}_values_60s.txt')
    
     
     print(df_model)
@@ -241,7 +241,7 @@ if raw_all_points_60s:
     fig.suptitle(f'60s obs, {res} {config} {suite} flt{flight}')
     fig.tight_layout()
     
-    save_boxplots = True
+    save_boxplots = False
     if save_boxplots:
         plt.savefig(f'D:/Project/Figures/PNG/{flight}/{suite}/stat_val/{config}_{res}_boxplots_all_60s_obs_flt{flight}.png')
         
@@ -270,7 +270,7 @@ if seperate_mountain_points_60s:
     db_legs = np.array(df_obs['legno'])
     condition = db_legs <=2
     
-    df_model = pd.read_csv(f'D:/Project/Model_Data/{suite}/Matched_interpolated_values_60s.txt')
+    df_model = pd.read_csv(f'D:/Project/Model_Data/{suite}/Matched_interpolated_{res}_values_60s.txt')
    
     
     print(df_model)
@@ -336,7 +336,7 @@ if seperate_mountain_points_60s:
     fig.suptitle(f'60s mountain obs, {res} {config} {suite} flt{flight}')
     fig.tight_layout()
     
-    save_boxplots = True
+    save_boxplots = False
     if save_boxplots:
         plt.savefig(f'D:/Project/Figures/PNG/{flight}/{suite}/stat_val/{config}_{res}_boxplots_all_60s_mountain_obs_flt{flight}.png')
         
@@ -364,7 +364,7 @@ if seperate_leeside_points_60s:
     db_legs = np.array(df_obs['legno'])
     condition = db_legs >2
     
-    df_model = pd.read_csv(f'D:/Project/Model_Data/{suite}/Matched_interpolated_values_60s.txt')
+    df_model = pd.read_csv(f'D:/Project/Model_Data/{suite}/Matched_interpolated_{res}_values_60s.txt')
    
     
     print(df_model)
@@ -430,7 +430,7 @@ if seperate_leeside_points_60s:
     fig.suptitle(f'60s leeside obs, {res} {config} {suite} flt{flight}')
     fig.tight_layout()
     
-    save_boxplots = True
+    save_boxplots =False
     if save_boxplots:
         plt.savefig(f'D:/Project/Figures/PNG/{flight}/{suite}/stat_val/{config}_{res}_boxplots_all_60s_leeside_obs_flt{flight}.png')
         

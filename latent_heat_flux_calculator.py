@@ -22,20 +22,20 @@ from iris.analysis import trajectory
 
 
 #%% 
-res = '0p5km'
-flight = '301'
-suite = 'u-bu807'
+res = '1p5km'
+flight = '306'
+suite = 'u-cc134'#'u-bu807'
 config = 'RA1M'
-stream_prefix = ''
-nc_directory = 'nc/Control/'
+stream_prefix = 'p'
+nc_directory = ''#'nc/Control/'
 
 #%%
 print('Loading cubes')
 #theta_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{nc_directory}RA1M_{res}_um_air_potential_temperature_24hrs_{stream_prefix}i_{flight}.nc', 'air_potential_temperature')
 #q_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{nc_directory}RA1M_{res}_um_specific_humidity_24hrs_{stream_prefix}i_{flight}.nc', 'specific_humidity')
 #p_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{nc_directory}RA1M_{res}_um_air_pressure_24hrs_{stream_prefix}i_{flight}.nc', 'air_pressure')
-lh_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{nc_directory}RA1M_{res}_um_upward_heat_flux_in_air_24hrs_{stream_prefix}i_{flight}.nc', 'upward_heat_flux_in_air')
-vap_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{nc_directory}RA1M_{res}_um_upward_water_vapor_flux_in_air_24hrs_{stream_prefix}i_{flight}.nc', 'upward_water_vapor_flux_in_air')
+lh_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{nc_directory}{config}_{res}_um_upward_heat_flux_in_air_24hrs_{stream_prefix}i_{flight}.nc', 'upward_heat_flux_in_air')
+vap_cube = iris.load_cube(f'D:/Project/Model_Data/{suite}/{nc_directory}{config}_{res}_um_upward_water_vapor_flux_in_air_24hrs_{stream_prefix}i_{flight}.nc', 'upward_water_vapor_flux_in_air')
 
 
 #%% approximation
@@ -50,4 +50,4 @@ lh_cube.standard_name = 'upward_latent_heat_flux_in_air'
 
 #%%
 print('Saving cube')
-iris.save(lh_cube, f'D:/Project/Model_Data/{suite}/{nc_directory}RA1M_{res}_um_upward_latent_heat_flux_in_air_24hrs_{stream_prefix}i_{flight}.nc')
+iris.save(lh_cube, f'D:/Project/Model_Data/{suite}/{nc_directory}{config}_{res}_um_upward_latent_heat_flux_in_air_24hrs_{stream_prefix}i_{flight}.nc')

@@ -9,23 +9,23 @@ For purposes of concatenating forecast data files into single 24hour forecast fi
 import iris
 import sys
 ## defining resolution domain, directory, and filenames
-variable = 'y_wind'
+variable = 'toa_outgoing_shortwave_flux'
 name = variable
-suite = 'u-bu807'
-nc_path = f'D:/Project/Model_Data/{suite}/nc/Control/'
-
-flight = 301
-stream = 'g'
+suite = 'u-cc134'
+nc_path = f'D:/Project/Model_Data/{suite}/'
+experiment = 'RA1M'
+flight = 306
+stream = 'pg'
 check_file = True
 if check_file:
-    filename = f'RA1M_4p4km_um'
+    filename = f'{experiment}_0p5km_um'
     cubes = iris.load(f'{nc_path}{filename}{stream}1_flt{flight}.nc')
     print(cubes)
 ## load model data cubes
 mlevel = True
 if mlevel:
-    for res in ['0p5km', '1p5km','4p4km']:
-        filename = f'RA1M_{res}_um'
+    for res in ['0p5km']:#, '1p5km','4p4km']:
+        filename = f'{experiment}_{res}_um'
         cubes = []
         cube1 = iris.load_cube(f'{nc_path}{filename}{stream}1_flt{flight}.nc', name); cubes.append(cube1) # fcst hours 0030-0600
         cube2 = iris.load_cube(f'{nc_path}{filename}{stream}2_flt{flight}.nc', name); cubes.append(cube2) # fcst hours 0630-1200

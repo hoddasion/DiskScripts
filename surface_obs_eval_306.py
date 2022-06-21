@@ -152,8 +152,8 @@ if plot_temp:
     lowT = 271.5; highT = 282
     fig, (ax0,ax1,ax2,ax3) = plt.subplots(4,1, figsize = (10,10))
     CtK = 273.15 # Celsius to Kelvin conversion
-    ax0.plot(time_x[1::2], np.array(HBV_obs.TEMP) + CtK, label = 'obs')
-    ax0.plot(time_x, temp_subcube.data[:,0], label = 'UM 0p5km')
+    ax0.plot(time_x[1::2], np.array(HBV_obs.TEMP) + CtK, label = 'obs', color = 'k')
+    ax0.plot(time_x, temp_subcube.data[:,0] - 0.132, label = 'UM 0p5km')#, color = 'darkorange')
     ax0.set_xlim(left = 0, right = 24)
     ax0.set_xticks(np.arange(0,25))
     ax0.set_xticklabels([])
@@ -163,8 +163,8 @@ if plot_temp:
     ax0.legend(fontsize = 12)
     ax0.set_ylabel('K')
     
-    ax1.plot(time_x[1::2], np.array(AEDEY_obs.TEMP) + CtK)
-    ax1.plot(time_x, temp_subcube.data[:,1])
+    ax1.plot(time_x[1::2], np.array(AEDEY_obs.TEMP) + CtK, color = 'k')
+    ax1.plot(time_x, temp_subcube.data[:,1] - 0.126)
     ax1.set_xlim(left = 0, right = 24)
     ax1.set_xticks(np.arange(0,25))
     ax1.set_xticklabels([])
@@ -173,8 +173,8 @@ if plot_temp:
     ax1.set_title('AEDEY - Upstream coast on major fjord')
     ax1.set_ylabel('K')
     
-    ax2.plot(time_x[1::2], np.array(GJOGR_obs.TEMP) + CtK)
-    ax2.plot(time_x, temp_subcube.data[:,2])
+    ax2.plot(time_x[1::2], np.array(GJOGR_obs.TEMP) + CtK, color = 'k')
+    ax2.plot(time_x, temp_subcube.data[:,2] - 0.186)
     ax2.set_xlim(left = 0, right = 24)
     ax2.set_xticks(np.arange(0,25))
     ax2.set_xticklabels([])
@@ -183,8 +183,8 @@ if plot_temp:
     ax2.set_title('GJOGR - Most southern, downstream coast')
     ax2.set_ylabel('K')
     
-    ax3.plot(time_x[1::2], np.array(BOLUN_obs.TEMP) + CtK)
-    ax3.plot(time_x, temp_subcube.data[:,3])
+    ax3.plot(time_x[1::2], np.array(BOLUN_obs.TEMP) + CtK, color = 'k')
+    ax3.plot(time_x, temp_subcube.data[:,3] + 0.395)
     ax3.set_xlim(left = 0, right = 24)
     ax3.set_xticks(np.arange(0,25))
     ax3.set_xticklabels(['00:00','','','','','','06:00','','','','','','12:00','','','','','','18:00','','','','','','00:00'])
@@ -193,16 +193,16 @@ if plot_temp:
     ax3.set_title('BOLUN - Upstream coast on northern fjord')
     ax3.set_ylabel('K')
     
-    fig.suptitle('2m Temperature - 19th March 2018 (case 306)')
+    #fig.suptitle('2m Temperature - 19th March 2018 (case 306)')
     plt.tight_layout()
-    plt.savefig('D:/Project/Figures/PNG/306/u-cc134/groundstations/RA1M_2m_temperature_4stations_306.png')
+    plt.savefig('D:/Project/Figures/PNG/306/u-cc134/groundstations/RA1M_2m_temperature_4stations_306_notitle.png')
 
 #%% plot wind
 plot_wind = True
 if plot_wind:
     fig, (ax0,ax1,ax2,ax3) = plt.subplots(4,1, figsize = (10,10))
     CtK = 273.15 # Celsius to Kelvin conversion
-    ax0.plot(time_x[1::2], np.array(HBV_obs.WSP), label = 'obs')
+    ax0.plot(time_x[1::2], np.array(HBV_obs.WSP), label = 'obs', color = 'k')
     ax0.plot(time_x, wsp_subcube.data[:,0], label = 'UM 0p5km')
     ax0.set_xlim(left = 0, right = 24)
     ax0.set_xticks(np.arange(0,25))
@@ -213,7 +213,7 @@ if plot_wind:
     ax0.legend(fontsize = 12)
     ax0.set_ylabel(r'ms$^{-1}$')
     
-    ax1.plot(time_x[1::2], np.array(AEDEY_obs.WSP))
+    ax1.plot(time_x[1::2], np.array(AEDEY_obs.WSP), color = 'k')
     ax1.plot(time_x, wsp_subcube.data[:,1])
     ax1.set_xlim(left = 0, right = 24)
     ax1.set_xticks(np.arange(0,25))
@@ -223,7 +223,7 @@ if plot_wind:
     ax1.set_title('AEDEY - Upstream coast on major fjord')
     ax1.set_ylabel(r'ms$^{-1}$')
     
-    ax2.plot(time_x[1::2], np.array(GJOGR_obs.WSP))
+    ax2.plot(time_x[1::2], np.array(GJOGR_obs.WSP), color = 'k')
     ax2.plot(time_x, wsp_subcube.data[:,2])
     ax2.set_xlim(left = 0, right = 24)
     ax2.set_xticks(np.arange(0,25))
@@ -233,7 +233,7 @@ if plot_wind:
     ax2.set_title('GJOGR - Most southern, downstream coast')
     ax2.set_ylabel(r'ms$^{-1}$')
     
-    ax3.plot(time_x[1::2], np.array(BOLUN_obs.WSP))
+    ax3.plot(time_x[1::2], np.array(BOLUN_obs.WSP), color = 'k')
     ax3.plot(time_x, wsp_subcube.data[:,3])
     ax3.set_xlim(left = 0, right = 24)
     ax3.set_xticks(np.arange(0,25))
@@ -243,16 +243,16 @@ if plot_wind:
     ax3.set_title('BOLUN - Upstream coast on northern fjord')
     ax3.set_ylabel(r'ms$^{-1}$')
     
-    fig.suptitle('10m windspeed - 19th March 2018 (case 306)')
+    #fig.suptitle('10m windspeed - 19th March 2018 (case 306)')
     plt.tight_layout()
-    plt.savefig('D:/Project/Figures/PNG/306/u-cc134/groundstations/RA1M_10m_windspeed_4stations_306.png')
+    plt.savefig('D:/Project/Figures/PNG/306/u-cc134/groundstations/RA1M_10m_windspeed_4stations_306_notitle.png')
 
 #%% plot wind
 plot_rh = True
 if plot_rh:
     fig, (ax0,ax1,ax2,ax3) = plt.subplots(4,1, figsize = (10,10))
     CtK = 273.15 # Celsius to Kelvin conversion
-    ax0.plot(time_x[1::2], np.array(HBV_obs.RH), label = 'obs')
+    ax0.plot(time_x[1::2], np.array(HBV_obs.RH), label = 'obs', color = 'k')
     ax0.plot(time_x, rh_subcube.data[:,0], label = 'UM 0p5km')
     ax0.set_xlim(left = 0, right = 24)
     ax0.set_xticks(np.arange(0,25))
@@ -263,7 +263,7 @@ if plot_rh:
     ax0.legend(fontsize = 12)
     ax0.set_ylabel('%')
     
-    ax1.plot(time_x[1::2], np.array(AEDEY_obs.RH))
+    ax1.plot(time_x[1::2], np.array(AEDEY_obs.RH), color = 'k')
     ax1.plot(time_x, rh_subcube.data[:,1])
     ax1.set_xlim(left = 0, right = 24)
     ax1.set_xticks(np.arange(0,25))
@@ -273,7 +273,7 @@ if plot_rh:
     ax1.set_title('AEDEY - Upstream coast on major fjord')
     ax1.set_ylabel('%')
     
-    ax2.plot(time_x[1::2], np.array(GJOGR_obs.RH))
+    ax2.plot(time_x[1::2], np.array(GJOGR_obs.RH), color = 'k')
     ax2.plot(time_x, rh_subcube.data[:,2])
     ax2.set_xlim(left = 0, right = 24)
     ax2.set_xticks(np.arange(0,25))
@@ -283,7 +283,7 @@ if plot_rh:
     ax2.set_title('GJOGR - Most southern, downstream coast')
     ax2.set_ylabel('%')
     
-    ax3.plot(time_x[1::2], np.array(BOLUN_obs.RH))
+    ax3.plot(time_x[1::2], np.array(BOLUN_obs.RH), color = 'k')
     ax3.plot(time_x, rh_subcube.data[:,3])
     ax3.set_xlim(left = 0, right = 24)
     ax3.set_xticks(np.arange(0,25))
@@ -293,7 +293,7 @@ if plot_rh:
     ax3.set_title('BOLUN - Upstream coast on northern fjord')
     ax3.set_ylabel('%')
     
-    fig.suptitle('2m Relative Humidity - 19th March 2018 (case 306)')
+    #fig.suptitle('2m Relative Humidity - 19th March 2018 (case 306)')
     plt.tight_layout()
-    plt.savefig('D:/Project/Figures/PNG/306/u-cc134/groundstations/RA1M_2m_relative_humidity_4stations_306.png')
+    plt.savefig('D:/Project/Figures/PNG/306/u-cc134/groundstations/RA1M_2m_relative_humidity_4stations_306_notitle.png')
 

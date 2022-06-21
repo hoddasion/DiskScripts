@@ -186,3 +186,33 @@ def save_vert_xsection(fig, maincube, index, pngpath, Case, pdfpath = None, file
         except: 
             print('PDF unsuccessful')
             pass
+        
+def mplt_symmetric_normalisation(data, cmap = 'bwr', limit_type = 'maximum', percentile = 0.99):
+    """
+    
+
+    Parameters
+    ----------
+    data : an ndarray of floats; your data.
+    cmap : string or matplotlib cmap object. The default is 'bwr'.
+    limit_type : string: 'maximum' r 'percentile'. If percentile is sued, check which is to be used (see argument below). The default is 'maximum'.
+    percentile : float, the percentile limit t be used when limit_type 'percentile' is used.
+         The default is 0.99.
+
+    Returns
+    -------
+    dnorm : matplotlib norm object.
+    dmap : matplotlib mappable.
+
+    """
+    
+    if limit_type == 'maximum':
+        ## find absolute maximum
+        absolute_maximum = np.nanmax(np.absolute(data))
+        dnorm = matplotlib.colors.Normalize(vmin = -absolute_maximum, vmax = absolute_maximum) # "data-norm"
+        dmap = matplotlib.cm.ScalarMappable(norm = dnorm, cmap = cmap) # "data-map"
+    elif limit_type == 'percentile':
+        absolute_percentile = np.percentile(np.absolute(data), percentile)
+        dnorm = matplotlib.colors.Normalize(vmin = -absolute_percentile, vmax = absolute_percentile) # "data-norm"
+        dmap = matplotlib.cm.ScalarMappable(norm = dnorm, cmap = cmap) # "data-map"
+    return dnorm, dmap
